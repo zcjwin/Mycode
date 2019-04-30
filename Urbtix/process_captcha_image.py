@@ -96,10 +96,10 @@ def interference_point(image_res,x = 0,y = 0):
                           + int(image_res[x + 1, y - 1]) + int(image_res[x + 1, y]) + int(image_res[x + 1, y + 1])
                     if sum <= 4 * 245:
                         image_res[x, y] = 0
-    cv2.imwrite(r'image\capimg\procapimg.png',image_res)
+    cv2.imwrite('./image/img/captcha1.png',image_res)
     for i in range(3):
         process_capimg()
-    image = cv2.imread(r'image\capimg\procapimg.png')
+    image = cv2.imread('./image/img/captcha1.png')
     result = pytesseract.image_to_string(image)
     print(result)
 
