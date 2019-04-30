@@ -97,7 +97,7 @@ def interference_point(image_res,x = 0,y = 0):
     # image = cv2.imread(r'image\capimg\procapimg.png')
     # result = pytesseract.image_to_string(image)
     # print(result)
-    #
+
     # cv2.namedWindow("capimg",cv2.WINDOW_NORMAL)
     # cv2.imshow("capimg",image_res)
     # cv2.waitKey(0)
