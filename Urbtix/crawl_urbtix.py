@@ -11,7 +11,6 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-import requests
 from io import BytesIO
 from random_userinfo import *
 from fateadm_api import *
