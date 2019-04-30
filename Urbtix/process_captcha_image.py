@@ -101,33 +101,5 @@ def interference_point(image_res,x = 0,y = 0):
         process_capimg()
     image = cv2.imread('./image/img/captcha1.png')
     result = pytesseract.image_to_string(image)
-    print(result)
-
-    cv2.namedWindow("capimg", cv2.WINDOW_NORMAL)
-    cv2.imshow("capimg", image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
-# if __name__ == '__main__':
-#     process_captcha_image()
-#     image = cv2.imread(r'image\capimg\procapimg.png')
-#     result = pytesseract.image_to_string(image)
-#     print(result)
-#
-#     cv2.namedWindow("capimg", cv2.WINDOW_NORMAL)
-#     cv2.imshow("capimg", image)
-#     cv2.waitKey(0)
-#     cv2.destroyAllWindows()
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # print(result)
+    return result
