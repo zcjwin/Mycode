@@ -1,5 +1,4 @@
 import time
-
 from selenium import webdriver
 from PIL import Image
 from selenium.webdriver.support.wait import WebDriverWait
