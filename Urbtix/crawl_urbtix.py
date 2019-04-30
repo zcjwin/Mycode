@@ -204,11 +204,11 @@ class CrawlUrbtix(object):
                     img.save('./image/clickimg/' + str(time.time()).replace('.', '') + '.png')
                     img.save('./image/img/' + str(i) + '.png')
 
-                # ss = TestFunc(file_dir="./image/img")
-                # for i in range(len(ss[-1])):
-                #     for j, s in enumerate(ss):
-                #         if s == ss[-1][i]:
-                #             t_captcha[j].click()
+                ss = TestFunc(file_dir="./image/img")
+                for i in range(len(ss[-1])):
+                    for j, s in enumerate(ss):
+                        if s == ss[-1][i]:
+                            t_captcha[j].click()
 
                 # 接受服务条款按钮
                 self.driver.find_element_by_id('checkbox-tnc').click()
