@@ -5,7 +5,7 @@ from PIL import Image
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from Urbtix.process_captcha_image import *
+from process_captcha_image import *
 
 
 def getCaptchaImage():
@@ -33,7 +33,7 @@ def getCaptchaImage():
     # 找到验证码的位置并保存
     image = Image.open(currentpage)
     image = image.crop((left,top,right,bottom))
-    image.save('./image/capimg.png')
+    image.save('./image/capatcha.png')
     # 获取每一个点击验证码图片
     click_captchaImage1 = driver.find_elements_by_xpath('//form/div/div/table/tbody/tr/td/table/tbody/tr[@class="login-tbl-captcha-image-row captcha-row"][3]/td/table/tbody/tr/td/img')
     # print(len(click_captchaImage1)) # 打印点击验证码所有节点的长度

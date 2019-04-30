@@ -2,10 +2,10 @@ import cv2
 import numpy as np
 import pytesseract
 from PIL import Image
-from Urbtix.cirpro_capimg import *
+from cirpro_capimg import *
 
 def process_captcha_image():
-    filepath = './image/capimg.png'
+    filepath = './image/capatcha.png'
     captcha_image = cv2.imread(filepath)
     gray_image = cv2.cvtColor(captcha_image,cv2.COLOR_BGR2GRAY)
     # 二值化
