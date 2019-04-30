@@ -2,7 +2,7 @@ import cv2
 import pytesseract
 
 def process_capimg():
-    filepath = './image/capimg/procapimg.png'
+    filepath = './image/img/captcha.png'
     captcha_image = cv2.imread(filepath)
     gray_image = cv2.cvtColor(captcha_image,cv2.COLOR_BGR2GRAY)
     # 二值化

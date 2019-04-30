@@ -36,6 +36,19 @@ def urbtix_login():
             # 等待页面加载出现"登入"
             WebDriverWait(driver, 10, 0.5).until(EC.visibility_of_element_located((By.LINK_TEXT, "登入")))
             driver.find_element_by_link_text('登入').click()
+
+            if driver.find_element_by_class_name('ui-dialog'):
+                driver.find_element_by_class_name('ui-dialog-buttonset').find_element_by_class_name('ui-button-text').click()
+                urbtix_login()
+            else:
+                dr = driver.find_elements_by_class_name('mem-login-state-link')[0].text
+                if dr == "登出":
+                    print("登录成功！")
+                    search()
+                elif driver.find_element_by_id('concurrent-login-yes'):
+                    driver.find_element_by_id('concurrent-login-yes').click()
+                    search()
+
             driver.find_element_by_id('j_username').send_keys(s['loginId'])
             driver.find_element_by_id('j_password').send_keys(s['abcDEF123456'])
             # 验证码

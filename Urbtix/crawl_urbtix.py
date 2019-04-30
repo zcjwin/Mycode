@@ -4,7 +4,9 @@ import time
 from PIL import Image
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.proxy import ProxyType
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -13,6 +15,14 @@ import requests
 from io import BytesIO
 from random_userinfo import *
 from fateadm_api import *
+from ua import *
+
+# filepath = './image/captcha/'+str(datetime.date.today())
+# if not os.path.exists(filepath):
+#     os.mkdir(filepath)
+
+
+
 
 
 
@@ -22,13 +32,14 @@ class CrawlUrbtix(object):
         # self.opt.set_headless()
         # 创建浏览器对象
         self.driver = webdriver.Chrome(options=self.opt)
+        # self.driver = webdriver.PhantomJS()
         self.wait = WebDriverWait(self.driver, 10, 0.5)
         # self.url = 'http://msg.urbtix.hk/'
         self.url = 'http://www.urbtix.hk'
 
     def openfile(self):
         userinfo_list = []
-        with open('infomation2.txt',encoding='utf-8') as f:
+        with open('infomation.txt',encoding='utf-8') as f:
             info_record = f.readlines()
             for record in info_record:
                 info_rec_dic = eval(record)
@@ -80,13 +91,9 @@ class CrawlUrbtix(object):
         # 找到验证码的位置并保存
         image = Image.open(currentpage)
         image = image.crop((left, top, right, bottom))
-        # image.save('./image/captcha/' + str(time.time()).replace('.', '') + '.png')
+        image.save('./image/captcha/' + str(time.time()).replace('.', '') + '.png')
         image.save('./image/img/capatcha.png')
-        # ss = TestFunc(file_dir="./image/img")
-        #
-        # for i in range(len(ss[-1])):
-        #     print(ss[-1][i])
-        
+
         t_captcha = self.driver.find_elements_by_xpath('//td[@id="captcha-image-input-key-container"]/table/tbody/tr/td')
         for i, img in enumerate(t_captcha):
             # print(img.location) # 每个点击验证码的坐标位置
@@ -96,7 +103,7 @@ class CrawlUrbtix(object):
             bottom = img.location['y'] + img.size['height']
             img = Image.open(currentpage)
             img = img.crop((left, top, right, bottom))
-            # img.save('./image/' + str(time.time()).replace('.','') + '.png')
+            img.save('./image/clickimg/' + str(time.time()).replace('.','') + '.png')
             img.save('./image/img/' + str(i) + '.png')
 
         ss = TestFunc(file_dir="./image/img")
@@ -133,7 +140,7 @@ class CrawlUrbtix(object):
     # 注册信息界面
     def register(self):
         info_list = []
-        with codecs.open('infomation2.txt','a+','utf-8') as f:
+        with codecs.open('infomation.txt','a+','utf-8') as f:
             infocount = int(input("请输入您要随机生成的注册信息数量："))
             for count in range(infocount):
                 info_dict = {}
@@ -165,8 +172,43 @@ class CrawlUrbtix(object):
                 info_dict['loginId'] = loginId
                 self.driver.find_element_by_id('password').send_keys('abcDEF123456')
                 self.driver.find_element_by_id('passwordRetype').send_keys('abcDEF123456')
+
                 # 验证码
                 # time.sleep(10)
+                currentpage = './image/screenshot/currentpage.png'
+                self.driver.save_screenshot(currentpage)
+                # 找到验证码元素的节点id
+                captchaImage_element = self.driver.find_element_by_id('captchaImage')
+                # print(captchaImage_element.location)  # 打印验证码元素的坐标位置
+                # print(captchaImage_element.size)      # 打印验证码元素的大小
+                left = captchaImage_element.location['x']
+                top = captchaImage_element.location['y']
+                right = captchaImage_element.location['x'] + captchaImage_element.size['width']
+                bottom = captchaImage_element.location['y'] + captchaImage_element.size['height']
+                # 找到验证码的位置并保存
+                image = Image.open(currentpage)
+                image = image.crop((left, top, right, bottom))
+                image.save('./image/captcha/' + str(time.time()).replace('.', '') + '.png')
+                image.save('./image/img/capatcha.png')
+
+                t_captcha = self.driver.find_elements_by_xpath(
+                    '//td[@id="captcha-image-input-key-container"]/table/tbody/tr/td')
+                for i, img in enumerate(t_captcha):
+                    # print(img.location) # 每个点击验证码的坐标位置
+                    left = img.location['x']
+                    top = img.location['y']
+                    right = img.location['x'] + img.size['width']
+                    bottom = img.location['y'] + img.size['height']
+                    img = Image.open(currentpage)
+                    img = img.crop((left, top, right, bottom))
+                    img.save('./image/clickimg/' + str(time.time()).replace('.', '') + '.png')
+                    img.save('./image/img/' + str(i) + '.png')
+
+                # ss = TestFunc(file_dir="./image/img")
+                # for i in range(len(ss[-1])):
+                #     for j, s in enumerate(ss):
+                #         if s == ss[-1][i]:
+                #             t_captcha[j].click()
 
                 # 接受服务条款按钮
                 self.driver.find_element_by_id('checkbox-tnc').click()
@@ -334,6 +376,7 @@ class CrawlUrbtix(object):
                 self.driver.find_element_by_xpath('//form/div/div/div/div[@id="button-confirm"]/div/div/span').click()
                 self.driver.find_element_by_id('checkbox-tnc').click()
                 self.driver.find_element_by_xpath('//form/div/div/div[@id="button-confirm"]/div/div/span').click()
+                # 判断是否付款成功
                 try:
                     self.driver.find_element_by_class_name('')
                 except NoSuchElementException:
@@ -343,17 +386,19 @@ class CrawlUrbtix(object):
 
     def start(self):
         self.driver.get(self.url)
+        self.driver.maximize_window()
+
         print('+' * 23)
-        print('|' + ' ' * 5 + '1、注册账户' + ' ' * 5 + '|')
-        print('|' + ' ' * 5 + '2、登录账户' + ' ' * 5 + '|')
+        print('|' + ' ' * 5 + '1、登录账户' + ' ' * 5 + '|')
+        print('|' + ' ' * 5 + '2、注册账户' + ' ' * 5 + '|')
         print('+' * 23)
         n = int(input("请选择："))
         L = [1, 2]
         if n not in L:
             int(input("请输入正确的序号："))
-        if n == 2:
-            self.openfile()
         if n == 1:
+            self.openfile()
+        if n == 2:
             self.register()
 
 
